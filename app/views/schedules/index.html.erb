@@ -122,15 +122,19 @@
     var end = <%= changeStartTime(workorder) %>;
 
   
-    console.log(testone-end)
+ 
  
     <% if find_by_id(workorder) == true %>
   
         document.getElementById('emptySpace<%= @j %>').style.cssText = 'disabled: false; grid-column-start: ' +column+ '; grid-column-end: ' +column+ '; grid-row-start: ' +testone+ '; grid-row-end: ' +end+ ';';
 
        
-        console.log(testone-end)
-        document.getElementById('emptySpace<%= @j %>').addEventListener("click", function(){ window.alert(<%= changeStartTime(workorder)- @emptyStart %>); }); 
+       
+        <% @timeInMinutes = changeStartTime(workorder) %>
+        <% @timeBetween = @timeInMinutes-@emptyStart %>
+        
+        
+        document.getElementById('emptySpace<%= @j %>').addEventListener("click", function(){ window.alert('<%= time_conversion(@timeBetween) %>'); }); 
         <%= @emptyStart= (workorder.duration + changeStartTime(workorder)) %>
       
     <% end %>

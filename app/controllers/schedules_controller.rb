@@ -33,7 +33,7 @@ class SchedulesController < ApplicationController
   def time_conversion(minutes)
 
     seconds = minutes *60;
-    Time.at(seconds).utc.strftime("%H:%M")
+   return Time.at(seconds).utc.strftime("%H:%M")
   end
   helper_method :time_conversion
 
