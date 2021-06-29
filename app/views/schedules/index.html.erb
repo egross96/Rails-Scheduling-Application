@@ -179,10 +179,12 @@
 
     
 
-    document.getElementById(iDiv.id).appendChild(document.createTextNode( '<%= getLocation(workorder) %>'))
+    document.getElementById(iDiv.id).appendChild(document.createTextNode( 'Location: <%= getLocation(workorder) %>\t\t '))
 
-    var linebreak = document.createElement('br');
-    document.getElementById(iDiv.id).appendChild(linebreak);
+    
+    document.getElementById(iDiv.id).appendChild(document.createTextNode( 'Price: $<%= workorder.price %>\t'))
+
+    document.getElementById(iDiv.id).appendChild(document.createTextNode( 'Time: <%= workorder.time.strftime('%H:%M') %>'))
 
     
 
