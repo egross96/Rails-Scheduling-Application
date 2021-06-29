@@ -1,0 +1,202 @@
+
+
+
+
+
+
+
+
+
+<div id="container">
+<div class="time-column"></div>
+<div class="name-row"></div>
+
+
+</div>
+
+
+
+<style>
+
+
+
+.time-column {
+  background-color:gray;
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1440;
+}
+
+.name-row {
+  background-color:gray;
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+
+#container {
+  display:grid;
+  grid-template-columns: 50px 300px 300px 300px 300px;
+  grid-template-rows: 50px repeat(1440,1px)
+}
+</style>
+
+
+
+<% @idvar=0 %>
+
+
+
+<% @technicians.each do |t| %>
+  <%= javascript_tag do %>
+ 
+    var iDiv = document.createElement('div');
+    iDiv.id = 'technician<%= @idvar %>';
+
+
+    var start = 1;
+    var finish = 1;
+
+    column = <%= t.id %> +1
+    
+    document.getElementById('container').appendChild(iDiv);   
+    document.getElementById(iDiv.id).appendChild(document.createTextNode('<%= t.name %>'))
+    document.getElementById('technician<%= @idvar %>').style.cssText = 'grid-column-start: ' +column+ '; grid-column-end: ' +column+ '; grid-row-start: ' +start+ '; grid-row-end: ' +finish+ ';';
+  <% end %>
+
+  <% @idvar+=1 %>
+<% end %>
+
+
+
+
+
+<% @x=1 %>
+<% @increment=0 %>
+<% while @x<24 %>
+  <%= javascript_tag do %>
+
+    var iDiv = document.createElement('div');
+    iDiv.id = 'time<%= @x %>';
+
+    var start = <%= @increment %>*60;
+    var finish = <%= @increment %>+60;
+    
+    var column = 1;
+    
+    document.getElementById('container').appendChild(iDiv);   
+
+    document.getElementById(iDiv.id).appendChild(document.createTextNode('<%= time_conversion(@increment+60) %>'))
+    
+    document.getElementById('time<%= @x %>').style.cssText = 'grid-column-start: ' +column+ '; grid-column-end: ' +column+ '; grid-row-start: ' +start+ '; grid-row-end: ' +finish+ ';';
+
+
+    <% @x+=1 %>
+  <% end %>
+  <% @increment+=60 %>
+<% end %>
+
+
+<% @j=0 %>
+<% @k=2 %>
+<% @emptyStart=0 %>
+<% @column=1 %>
+<% @work_orders.each do |workorder| %>
+
+ 
+  <%= javascript_tag do %>
+  
+  
+
+
+    // using this to create our empty divs
+    var iDiv = document.createElement('div');
+    iDiv.id = 'emptySpace<%= @j %>';
+    
+    document.getElementById('container').appendChild(iDiv);   
+
+    var testone = <%= @emptyStart %>;
+    var end = <%= changeStartTime(workorder) %>;
+
+  
+    console.log(testone-end)
+ 
+    <% if find_by_id(workorder) == true %>
+  
+        document.getElementById('emptySpace<%= @j %>').style.cssText = 'disabled: false; grid-column-start: ' +column+ '; grid-column-end: ' +column+ '; grid-row-start: ' +testone+ '; grid-row-end: ' +end+ ';';
+
+       
+        console.log(testone-end)
+        document.getElementById('emptySpace<%= @j %>').addEventListener("click", function(){ window.alert(<%= changeStartTime(workorder)- @emptyStart %>); }); 
+        <%= @emptyStart= (workorder.duration + changeStartTime(workorder)) %>
+      
+    <% end %>
+
+    
+   
+
+
+    
+
+
+
+
+
+  
+    var start = <%= changeStartTime(workorder) %>;
+    var finish = <%= workorder.duration %> + start;
+    var column = <%= workorder.technician_id %>+1;
+
+   
+    
+
+    
+    
+    var iDiv = document.createElement('div');
+    iDiv.id = 'block<%= @j %>';
+    
+    document.getElementById('container').appendChild(iDiv);   
+    
+    document.getElementById('block<%= @j %>').style.cssText = 'grid-column-start: ' +column+ '; grid-column-end: ' +column+ '; grid-row-start: ' +start+ '; grid-row-end: ' +finish+ ';';
+  
+    switch(column){
+      case 2:
+        document.getElementById('block<%= @j %>').style.backgroundColor = '#4fc3f7';
+        break;
+      case 3:
+        document.getElementById('block<%= @j %>').style.backgroundColor = '#ba68c8';
+        break;
+      case 4:
+        document.getElementById('block<%= @j %>').style.backgroundColor = '#b0bec5';
+        break;
+      case 5:
+        document.getElementById('block<%= @j %>').style.backgroundColor = '#ce93d8';
+        break;
+    }
+
+    
+
+    document.getElementById(iDiv.id).appendChild(document.createTextNode( '<%= getLocation(workorder) %>'))
+
+    var linebreak = document.createElement('br');
+    document.getElementById(iDiv.id).appendChild(linebreak);
+
+    
+
+     
+
+  <% end %>
+  <% @j+=1 %>
+
+<% end %>
+
+<%= javascript_tag do %>
+
+  document.getElementById("emptySpace3").disabled = true;
+  document.getElementById("emptySpace6").disabled = true;
+  document.getElementById("emptySpace9").disabled = true;
+  document.getElementById("emptySpace11").disabled = true;
+<% end %>

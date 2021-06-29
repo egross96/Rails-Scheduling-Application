@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 
+  technician_id: 
+  location_id: 
+  time: 2021-06-24 10:21:58
+  duration: 
+  price: 
+
+two:
+  id: 
+  technician_id: 
+  location_id: 
+  time: 2021-06-24 10:21:58
+  duration: 
+  price: 
