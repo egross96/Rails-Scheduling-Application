@@ -1,25 +1,9 @@
 
-
-
-
-
-
-
-
-
-<div id="container">
-<div class="time-column"></div>
-<div class="name-row"></div>
-
-
-</div>
+<html>
 
 
 
 <style>
-
-
-
 .time-column {
   background-color:gray;
   grid-column-start: 1;
@@ -45,11 +29,13 @@
 </style>
 
 
+<div id="container">
+<div class="time-column"></div>
+<div class="name-row"></div>
+</div>
+
 
 <% @idvar=0 %>
-
-
-
 <% @technicians.each do |t| %>
   <%= javascript_tag do %>
  
@@ -65,8 +51,8 @@
     document.getElementById('container').appendChild(iDiv);   
     document.getElementById(iDiv.id).appendChild(document.createTextNode('<%= t.name %>'))
     document.getElementById('technician<%= @idvar %>').style.cssText = 'grid-column-start: ' +column+ '; grid-column-end: ' +column+ '; grid-row-start: ' +start+ '; grid-row-end: ' +finish+ ';';
+ 
   <% end %>
-
   <% @idvar+=1 %>
 <% end %>
 
@@ -75,90 +61,39 @@
 
 
 <% @x=1 %>
-<% @increment=0 %>
+<% @timeIncrement=0 %>
 <% while @x<24 %>
   <%= javascript_tag do %>
 
     var iDiv = document.createElement('div');
     iDiv.id = 'time<%= @x %>';
 
-    var start = <%= @increment %>*60;
-    var finish = <%= @increment %>+60;
+    var start = <%= @timeIncrement %>*60;
+    var finish = <%= @timeIncrement %>+60;
     
     var column = 1;
     
     document.getElementById('container').appendChild(iDiv);   
-
-    document.getElementById(iDiv.id).appendChild(document.createTextNode('<%= time_conversion(@increment+60) %>'))
-    
+    document.getElementById(iDiv.id).appendChild(document.createTextNode('<%= time_conversion(@timeIncrement+60) %>'))  
     document.getElementById('time<%= @x %>').style.cssText = 'grid-column-start: ' +column+ '; grid-column-end: ' +column+ '; grid-row-start: ' +start+ '; grid-row-end: ' +finish+ ';';
 
-
     <% @x+=1 %>
+
   <% end %>
-  <% @increment+=60 %>
+  <% @timeIncrement+=60 %>
 <% end %>
 
 
 <% @j=0 %>
-<% @k=2 %>
-<% @emptyStart=0 %>
 <% @column=1 %>
+
 <% @work_orders.each do |workorder| %>
-
- 
   <%= javascript_tag do %>
-  
-  
-
-
-    // using this to create our empty divs
-    var iDiv = document.createElement('div');
-    iDiv.id = 'emptySpace<%= @j %>';
-    
-    document.getElementById('container').appendChild(iDiv);   
-
-    var testone = <%= @emptyStart %>;
-    var end = <%= changeStartTime(workorder) %>;
-
-  
- 
- 
-    <% if find_by_id(workorder) == true %>
-  
-        document.getElementById('emptySpace<%= @j %>').style.cssText = 'disabled: false; grid-column-start: ' +column+ '; grid-column-end: ' +column+ '; grid-row-start: ' +testone+ '; grid-row-end: ' +end+ ';';
-
-       
-       
-        <% @timeInMinutes = changeStartTime(workorder) %>
-        <% @timeBetween = @timeInMinutes-@emptyStart %>
-        
-        
-        document.getElementById('emptySpace<%= @j %>').addEventListener("click", function(){ window.alert('<%= time_conversion(@timeBetween) %>'); }); 
-        <%= @emptyStart= (workorder.duration + changeStartTime(workorder)) %>
-      
-    <% end %>
-
-    
-   
-
-
-    
-
-
-
-
-
   
     var start = <%= changeStartTime(workorder) %>;
     var finish = <%= workorder.duration %> + start;
     var column = <%= workorder.technician_id %>+1;
 
-   
-    
-
-    
-    
     var iDiv = document.createElement('div');
     iDiv.id = 'block<%= @j %>';
     
@@ -183,26 +118,14 @@
 
     
 
-    document.getElementById(iDiv.id).appendChild(document.createTextNode( 'Location: <%= getLocation(workorder) %>\t\t '))
-
-    
+    document.getElementById(iDiv.id).appendChild(document.createTextNode( 'Location: <%= getLocation(workorder) %>\t\t '))  
     document.getElementById(iDiv.id).appendChild(document.createTextNode( 'Price: $<%= workorder.price %>\t'))
-
     document.getElementById(iDiv.id).appendChild(document.createTextNode( 'Time: <%= workorder.time.strftime('%H:%M') %>'))
 
     
-
-     
-
   <% end %>
   <% @j+=1 %>
 
 <% end %>
 
-<%= javascript_tag do %>
-
-  document.getElementById("emptySpace3").disabled = true;
-  document.getElementById("emptySpace6").disabled = true;
-  document.getElementById("emptySpace9").disabled = true;
-  document.getElementById("emptySpace11").disabled = true;
-<% end %>
+</html>

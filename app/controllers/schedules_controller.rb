@@ -3,8 +3,6 @@ class SchedulesController < ApplicationController
     @locations = Location.all 
     @technicians = Technician.all 
     @work_orders = WorkOrder.all 
-
-
     #for the case that CSV is not ordered by technicians, we need to sort them by column
     @work_orders.sort_by(&:technician_id)
   end
@@ -21,8 +19,6 @@ class SchedulesController < ApplicationController
   end
   helper_method :changeStartTime
 
-
-  
   def getLocation(workorder)
     id = workorder.location_id
     location = Location.find_by_id(id)
@@ -37,19 +33,4 @@ class SchedulesController < ApplicationController
   end
   helper_method :time_conversion
 
-
-  def find_by_id(workorder)
-    #if the next ID is different we need to switch columns
-    if workorder.nil?
-      return false;
-    end
-    if WorkOrder.find_by_id(workorder.id+1).nil?
-      return false;
-      if WorkOrder.find_by_id(workorder.id+1).technician_id != workorder.technician_id 
-        return false;
-      end
-    end
-    return true;
-  end
-  helper_method :find_by_id
 end
